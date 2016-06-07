@@ -37,6 +37,7 @@ typedef enum {
 
 - (BOOL)isValid;
 - (void)stateMeta;
+- (void)stateCardNumber;
 
 @property(nonatomic) UITextBorderStyle borderStyle;
 @property(nonatomic) PKViewImageStyle imageStyle;
