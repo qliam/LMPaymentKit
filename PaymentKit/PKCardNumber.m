@@ -44,7 +44,7 @@
     
     if (range >= 40 && range <= 49) {
         return PKCardTypeVisa;
-    } else if (range >= 50 && range <= 59) {
+    } else if (range >= 51 && range <= 55) {
         return PKCardTypeMasterCard;
     } else if (range == 34 || range == 37) {
         return PKCardTypeAmex;
@@ -54,7 +54,10 @@
         return PKCardTypeJCB;
     } else if (range == 30 || range == 36 || range == 38 || range == 39) {
         return PKCardTypeDinersClub;
-    } else {
+    } else if (range == 50 || (range >= 56 && range <= 69)) {
+        return PKCardTypeMaestro;
+    }
+    else {
         return PKCardTypeUnknown;
     }
 }
@@ -187,7 +190,16 @@
         length = 15;
     } else if (type == PKCardTypeDinersClub) {
         length = 14;
-    } else {
+    }
+    else if (type == PKCardTypeMaestro) {
+        if([number length] == 16 && [self isValidLuhn]) {
+            length = 16;
+        }
+        else {
+            length = 17;
+        }
+    }
+    else {
         length = 16;
     }
     return length;
