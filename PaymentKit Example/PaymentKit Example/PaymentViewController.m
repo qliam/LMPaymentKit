@@ -1,6 +1,6 @@
 //
 //  ViewController.m
-//  PKPayment Example
+//  PTKPayment Example
 //
 //  Created by Alex MacCaw on 1/21/13.
 //  Copyright (c) 2013 Stripe. All rights reserved.
@@ -8,35 +8,42 @@
 
 #import "PaymentViewController.h"
 
+@interface PaymentViewController()
+
+@property IBOutlet PTKView* paymentView;
+
+@end
+
+
+#pragma mark -
+
 @implementation PaymentViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+    }
+
+    self.title = @"Change Card";
+    
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Save" style:UIBarButtonItemStyleDone target:self action:@selector(save:)];
+    saveButton.enabled = NO;
+    self.navigationItem.rightBarButtonItem = saveButton;
+    
+    self.paymentView = [[PTKView alloc] initWithFrame:CGRectMake(15, 25, 290, 45)];
     self.paymentView.delegate = self;
-	[self.paymentView becomeFirstResponder];
+    
+    [self.view addSubview:self.paymentView];
+    [self.paymentView becomeFirstResponder];
 }
 
-- (void)paymentView:(PKView *)paymentView withCard:(PKCard *)card isValid:(BOOL)valid
+
+- (void) paymentView:(PTKView *)paymentView withCard:(PTKCard *)card isValid:(BOOL)valid
 {
     self.navigationItem.rightBarButtonItem.enabled = valid;
-}
-
-- (void)paymentView:(PKView *)paymentView didChangeState:(PKViewState)state
-{
-	switch (state) {
-		case PKViewStateCardNumber:
-			self.helpLabel.text = @"Enter card number";
-			break;
-			
-		case PKViewStateExpiry:
-			self.helpLabel.text = @"Enter expiry date";
-			break;
-			
-		case PKViewStateCVC:
-			self.helpLabel.text = @"Enter security code";
-			break;
-	}
 }
 
 - (void)didReceiveMemoryWarning
@@ -47,7 +54,7 @@
 
 - (IBAction)save:(id)sender
 {
-    PKCard *card = self.paymentView.card;
+    PTKCard* card = self.paymentView.card;
     
     NSLog(@"Card last4: %@", card.last4);
     NSLog(@"Card expiry: %lu/%lu", (unsigned long)card.expMonth, (unsigned long)card.expYear);
