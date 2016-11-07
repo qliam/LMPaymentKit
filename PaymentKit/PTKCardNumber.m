@@ -41,9 +41,12 @@
     
     if (range >= 40 && range <= 49) {
         return PTKCardTypeVisa;
-    } else if (range >= 50 && range <= 59) {
+    } else if (range >= 51 && range <= 55) {
         return PTKCardTypeMasterCard;
-    } else if (range == 34 || range == 37) {
+    } else if (range == 50 || (range >= 56 && range <= 69)) {
+        return PKCardTypeMaestro;
+    } 
+    else if (range == 34 || range == 37) {
         return PTKCardTypeAmex;
     } else if ([_number hasPrefix:@"6011"] || [_number hasPrefix:@"65"]) {
         return PTKCardTypeDiscover;
@@ -202,7 +205,15 @@
         length = 15;
     } else if (type == PTKCardTypeDinersClub) {
         length = 14;
-    } else {
+    } else if (type == PKCardTypeMaestro) {
+        if([number length] == 16 && [self isValidLuhn]) {
+            length = 16;
+        }
+        else {
+            length = 17;
+        }
+    }
+    else {
         length = 16;
     }
     return length;
